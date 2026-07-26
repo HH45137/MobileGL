@@ -288,6 +288,13 @@ set(SOURCE_FILES
     MobileGL/MG_State/GLState/RenderbufferState/RenderbufferState.cpp
 )
 
+if(WIN32)
+    list(APPEND SOURCE_FILES
+        MobileGL/MG_Impl/WGLImpl/Exporting/Definitions.cpp
+        MobileGL/MG_Impl/WGLImpl/WGLImpl.h
+    )
+endif()
+
 if (APPLE AND NOT MOBILEGL_IOS)
     list(APPEND SOURCE_FILES
         MobileGL/MG_Impl/CGLImpl/CGLImpl.cpp

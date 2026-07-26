@@ -313,6 +313,7 @@ namespace MobileGL {
             Android,
             X11,
             MetalLayer,
+            Windows,
             // TODO: Wayland, Windows, etc.
             WindowBackendCount,
             Unknown = -1

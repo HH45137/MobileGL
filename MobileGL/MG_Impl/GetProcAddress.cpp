@@ -24,6 +24,16 @@ extern "C" EGLDisplay eglGetPlatformDisplayEXT(EGLenum platform, void* native_di
 namespace MobileGL::MG_Impl {
     void* GetProcAddress(const char* name) {
         MGLOG_D("GetProcAddress(%s)", name);
+
+#if defined(_WIN32)
+        const HMODULE selfModule = GetModuleHandleA(nullptr);
+        // const HMODULE selfModule = GetModuleHandleA("libMobileGL.dll");
+        if (FARPROC proc = GetProcAddress(selfModule, name)) {
+            return (void*)proc;
+        }
+#endif
+
+#if !defined(_WIN32)
         GETPROC(eglChooseConfig, name);
         GETPROC(eglCopyBuffers, name);
         GETPROC(eglCreateContext, name);
@@ -69,6 +79,7 @@ namespace MobileGL::MG_Impl {
         GETPROC(eglCreatePlatformWindowSurface, name);
         GETPROC(eglCreatePlatformPixmapSurface, name);
         GETPROC(eglWaitSync, name);
+#endif
 
 #if defined(__APPLE__) && !defined(MOBILEGL_IOS)
         GETPROC(CGLChoosePixelFormat, name);
@@ -96,6 +107,7 @@ namespace MobileGL::MG_Impl {
         GETPROC(CGLErrorString, name);
 #endif
 
+#if !defined(_WIN32)
         GETPROC(glCullFace, name);
         GETPROC(glFrontFace, name);
         GETPROC(glHint, name);
@@ -1400,6 +1412,7 @@ namespace MobileGL::MG_Impl {
         GETPROC(glViewportSwizzleNV, name);
         GETPROC(glFramebufferTextureMultiviewOVR, name);
         // GETPROC(glNamedFramebufferTextureMultiviewOVR, name);
+#endif
 
         MGLOG_W("GetProcAddress(%s) = nullptr!", name);
         return nullptr;
